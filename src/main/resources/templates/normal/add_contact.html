@@ -14,7 +14,7 @@
       <div class="container text-center">
         <div th:if="${session.containsKey('message')}" class="alert" th:classappend="${session?.message?.type}" role="alert">
           <p th:text="${session?.message?.content}"></p>
-          <th:block th:text="${@homeController.removeVerificationMessageFromSession()}"></th:block>
+          <th:block th:text="${@userController.removeVerificationMessageFromSession()}"></th:block>
         </div>
       </div>
       <div class="container-fluid mt-1">
@@ -30,7 +30,7 @@
                     <i class="fas fa-plus"></i>
                   </div>
                 </div>
-                <input type="text" id="name" name="name" placeholder="Enter Name" class="form-control">
+                <input type="text" id="name" name="name" placeholder="Enter Name" class="form-control" required>
               </div>
 
               <!-- Second Name-->
@@ -40,7 +40,7 @@
                     <i class="fas fa-user-alt"></i>
                   </div>
                 </div>
-                <input type="text" id="nickname" name="nickname" placeholder="Enter Nickname" class="form-control">
+                <input type="text" id="nickname" name="nickname" placeholder="Enter Nickname" class="form-control" required>
               </div>
 
               <!-- Phone Field-->
@@ -50,7 +50,7 @@
                     <i class="fas fa-phone"></i>
                   </div>
                 </div>
-                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter Mobile Number" class="form-control">
+                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter Mobile Number" class="form-control" required>
               </div>
 
               <!-- Email Field-->
@@ -60,7 +60,7 @@
                     <strong>@</strong>
                   </div>
                 </div>
-                <input type="text" id="email" name="email" placeholder="Enter Email Address" class="form-control">
+                <input type="text" id="email" name="email" placeholder="Enter Email Address" class="form-control" required>
               </div>
 
               <!-- Work Field-->
@@ -70,7 +70,7 @@
                     <i class="fa fa-briefcase"></i>
                   </div>
                 </div>
-                <input type="text" id="work" name="work" placeholder="Enter Work" class="form-control">
+                <input type="text" id="work" name="work" placeholder="Enter Work" class="form-control" required>
               </div>
 
               <!-- Contact Description Field-->
@@ -94,6 +94,13 @@
       </div>
     </div>
   </div>
+
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      selector: '#description'
+    });
+  </script>
 
 </section>
 </body>

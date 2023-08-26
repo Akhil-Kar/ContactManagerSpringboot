@@ -3,11 +3,15 @@ package com.smart.controller;
 import com.smart.entities.Contact;
 import com.smart.entities.User;
 import com.smart.helper.Message;
+import com.smart.service.ContactService;
 import com.smart.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -28,6 +33,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ContactService contactService;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -60,6 +68,7 @@ public class UserController {
 //            Processing Image for Profile Pic
             if (file.isEmpty()) {
                 System.out.println("File is Empty");
+//                throw new Exception();
             } else {
 //                Upload file to folder
                 String fileName = file.getOriginalFilename()+"_"+contact.getEmail()+"_"+user.getId();
@@ -85,6 +94,25 @@ public class UserController {
 
         System.out.println("data" + contact);
         return "normal/add_contact";
+    }
+
+//    Show contact handler
+    @GetMapping("/view-contact/{page}")
+    public String viewContact(@PathVariable("page") Integer page, Model model, Principal principal) {
+        model.addAttribute("title", "View Contact - Smart Contact Manager");
+
+        String username = principal.getName();
+        User user = userService.getUser(username);
+
+//        Per Page 5 Contacts
+//        Requirement current Number
+        Page<Contact> contacts = contactService.findContactsByUser(user.getId(), page);
+
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPage", contacts.getTotalPages());
+
+        return "normal/view_contact";
     }
 
     public void removeVerificationMessageFromSession() {
